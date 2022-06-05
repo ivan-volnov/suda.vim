@@ -1,20 +1,10 @@
 function! suda#system(cmd, ...) abort
-  let cmd = printf('sudo -p '''' -n %s', a:cmd)
+  let cmd = printf('doas -n %s', a:cmd)
   if &verbose
     echomsg '[suda]' cmd
   endif
   let result = a:0 ? system(cmd, a:1) : system(cmd)
-  if v:shell_error == 0
-    return result
-  endif
-  try
-    call inputsave()
-    redraw | let password = inputsecret(g:suda#prompt)
-  finally
-    call inputrestore()
-  endtry
-  let cmd = printf('sudo -p '''' -S %s', a:cmd)
-  return system(cmd, password . "\n" . (a:0 ? a:1 : ''))
+  return result
 endfunction
 
 function! suda#read(expr, ...) abort range
@@ -247,6 +237,3 @@ augroup suda_internal
   autocmd BufWritePre,BufWritePost   suda://* :
   autocmd FileWritePre,FileWritePost suda://* :
 augroup END
-
-" Configure
-let g:suda#prompt = get(g:, 'suda#prompt', 'Password: ')

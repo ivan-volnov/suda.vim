@@ -3,7 +3,7 @@
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
 [![Doc](https://img.shields.io/badge/doc-%3Ah%20suda-orange.svg?style=flat-square)](doc/suda.txt)
 
-_suda_ is a plugin to read or write files with `sudo` command.
+_suda_ is a plugin to read or write files with `doas` command in non interactive mode (nopass option)
 
 This plugin was built while `:w !sudo tee % > /dev/null` trick does not work on [neovim][].
 
@@ -19,28 +19,21 @@ This plugin is strongly inspired by [sudo.vim][] but the interfaces was aggressi
 Use `SudaRead` to open unreadable files like:
 
 ```
-" Re-open a current file with sudo
+" Re-open a current file with doas
 :SudaRead
 
-" Open /etc/sudoers with sudo
+" Open /etc/sudoers with doas
 :SudaRead /etc/sudoers
 ```
 
 Or `SudaWrite` to write unwritable files like:
 
 ```
-" Forcedly save a current file with sudo
+" Forcedly save a current file with doas
 :SudaWrite
 
 " Write contents to /etc/profile
 :SudaWrite /etc/profile
-```
-
-You can change the prompt string with `g:suda#prompt`.
-
-```vim
-" 'Password' in french
-let g:suda#prompt = 'Mot de passe: '
 ```
 
 ### Smart edit
@@ -60,12 +53,3 @@ or
 ```
 
 Will open `suda:///etc/hosts` or `suda:///etc/shadow` instead of `/etc/hosts` or `/etc/shadow` because that files are not writable or not readable.
-
-### Windows
-
-Install [mattn/sudo](https://github.com/mattn/sudo) or [gerardog/gsudo](https://github.com/gerardog/gsudo) to enable this plugin in Windows.
-Make sure that the following shows `1`.
-
-```vim
-: echo executable('sudo')
-```
